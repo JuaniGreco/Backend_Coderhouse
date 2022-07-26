@@ -1,18 +1,21 @@
 class Usuario {
-    constructor() {
-        this.apellido = this.setApellido('Greco'); ;
-        this.nombre = this.setNombre('Juani');
-        this.libros = [];
-        this.mascotas = [];
+    constructor(nombre, apellido, libros, mascotas) {
+        this.apellido = this.setApellido({apellido}); ;
+        this.nombre = this.setNombre({nombre});
+        this.libros = [libros];
+        this.mascotas = [mascotas];
 
         this.addBook('El señor de los anillos', 'J.R.R. Tolkien');
         this.addBook('Harry Potter', 'J.K. Rowling');
         this.addMascota('Gato');
         this.addMascota('Perro');
 
-        console.log(this.getFullName);
-        console.log(`Usted tiene ${this.countMascotas()} mascotas`);
-        console.log(`Lista de libros: ${this.getBookNames()}`);
+        usuarioPrueba = new Usuario('Juan', 'Greco', [], []);
+        console.log(usuarioPrueba.getFullName());
+        console.log(usuarioPrueba.addBook('El señor de los anillos', 'J.R.R. Tolkien'));
+        console.log(usuarioPrueba.addMascota('Perro'));
+        console.log(`Usted tiene ${usuarioPrueba.countMascotas()} mascotas`);
+        console.log(`Lista de libros: ${usuarioPrueba.getBookNames()}`);
     }
     getApellido() {
         return this.apellido;
