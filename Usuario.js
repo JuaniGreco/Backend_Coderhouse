@@ -2,8 +2,8 @@ class Usuario {
     constructor(nombre, apellido, libros, mascotas) {
         this.apellido = this.setApellido({apellido}); ;
         this.nombre = this.setNombre({nombre});
-        this.libros = [libros];
-        this.mascotas = [mascotas];
+        this.libros = [{libros}];
+        this.mascotas = [{mascotas}];
 
         this.addBook('El señor de los anillos', 'J.R.R. Tolkien');
         this.addBook('Harry Potter', 'J.K. Rowling');
