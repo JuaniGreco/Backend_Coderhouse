@@ -4,18 +4,6 @@ class Usuario {
         this.apellido = apellido;
         this.libros = libros;
         this.mascotas = mascotas;
-
-        const usuarioPrueba = new Usuario('Juan', 'Perez', [], []);
-        usuarioPrueba.addBook('El señor de los anillos', 'J.R.R. Tolkien');
-        usuarioPrueba.addBook('Harry Potter', 'J.K. Rowling');
-        usuarioPrueba.addMascota('Gato');
-        usuarioPrueba.addMascota('Perro');
-        console.log(usuarioPrueba.getFullName());
-        console.log(usuarioPrueba.addBook('El señor de los anillos', 'J.R.R. Tolkien'));
-        console.log(usuarioPrueba.addMascota('Perro'));
-        console.log(`Usted tiene ${usuarioPrueba.countMascotas()} mascotas`);
-        console.log(`Lista de libros: ${usuarioPrueba.getBookNames()}`);
-
     }
     getApellido() {
         return this.apellido;
@@ -24,38 +12,48 @@ class Usuario {
         return this.nombre;
     }
 
-    setApellido(apellido){
+    setApellido(apellido) {
         this.apellido = apellido;
     }
 
-    setNombre(nombre){
+    setNombre(nombre) {
         this.nombre = nombre;
     }
-    setLibros(libros){
-        this.libros = libros;
-    }
 
-    setMascotas(mascotas){
+    setMascotas(mascotas) {
         this.mascotas = mascotas;
     }
 
     getFullName() {
-        return `Bienvenido ${nombre}, ${apellido}!`;
+        return `Bienvenido ${this.nombre} ${this.apellido}!`;
     }
 
-    countMascotas(){
+    countMascotas() {
         return this.mascotas.length;
     }
 
-    addBook(nombre, autor){
-        this.libros.push(new Libro(nombre, autor));
+    addBook(nombreLibro, autorLibro) {
+        const libro = ([` ${nombreLibro}`, ` ${autorLibro}`])
+        this.libros.push(libro);
     }
 
-    getBookNames(){
-        return this.libros.map(libro => libro.getNombre());
+    getBookNames() {
+        return this.libros.map(libros => `*${libros}.`);
     }
 
-    addMascota(nombre){
+    addMascota(nombre) {
         this.mascotas.push(nombre);
     }
-} 
+
+    
+}
+
+const usuarioPrueba = new Usuario('Juan', 'Perez', [], []);
+usuarioPrueba.addBook('El señor de los anillos', 'J.R.R. Tolkien');
+usuarioPrueba.addBook('Harry Potter', 'J.K. Rowling');
+usuarioPrueba.addMascota('Gato');
+usuarioPrueba.addMascota('Perro');
+console.log(usuarioPrueba.getFullName());
+
+console.log(`Usted tiene ${usuarioPrueba.countMascotas()} mascotas`);
+console.log(`Lista de libros: ${usuarioPrueba.getBookNames()}`);
