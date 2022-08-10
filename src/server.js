@@ -1,20 +1,21 @@
 const express = require('express');
-const Contenedor = require('./src/Contenedor.js');
+const Contenedor = require('./Contenedor.js');
 
 const app = express();
-const productos = new Contenedor();
+const productos = new Contenedor('./productos.json');
 const PORT = 8080;
 
 app.get('/', (req, res)=>{
     res.send('<h1 style="color: blue;">Bienvenidos al servidor express</h1> <h3>Para ver los productos, ingrese a la ruta /productos y para ver el producto aleatorio a la ruta /productoRandom</h2>');
 });
+
 app.get('/productos', (req, res)=>{
     const prod = await productos.getAll();
     res.send(prod);
 });
 
 app.get('/productoRandom', (req, res)=>{
-    res.send(contenedor.getRandom());
+    res.send(await contenedor.getRandom());
 });
 
 app.get('*', (req, res)=>{
