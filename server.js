@@ -9,13 +9,13 @@ app.get('/', (req, res)=>{
     res.send('<h1 style="color: blue;">Bienvenidos al servidor express</h1> <h3>Para ver los productos, ingrese a la ruta /productos y para ver el producto aleatorio a la ruta /productoRandom</h2>');
 });
 
-app.get('/productos', (req, res)=>{
+app.get('/productos', async (req, res)=>{
     const prod = await productos.getAll();
     res.send(prod);
 });
 
-app.get('/productoRandom', (req, res)=>{
-    res.send(await contenedor.getRandom());
+app.get('/productoRandom', async (req, res)=>{
+    res.send(await (productos.getRandom()));
 });
 
 app.get('*', (req, res)=>{
