@@ -67,16 +67,30 @@ class Contenedor {
             console.log(`Error ${error} cuando elimina`);
         }
     }
-}
-    async function test(){
-        const test = new Contenedor('./archivos/desafio-data.json');
-        console.log(await test.save({name: "Monitor", price: 600, thumbnail: "https://www.monitor-sony.com/wcsstore/GlobalAssets/images/products/monitor-sony-lg-27v5a-1-1.jpg"}));
-        console.log(await test.save({name: "Mouse", price: 100, thumbnail: "https://www.mouse-laptop.com/wcsstore/GlobalAssets/images/products/mouse-laptop-logitech-m-100-1-1.jpg"}));
-        console.log(await test.save({name: "Teclado", price: 200, thumbnail: "https://www.teclado-laptop.com/wcsstore/GlobalAssets/images/products/teclado-laptop-logitech-m-200-1-1.jpg"}));
-        console.log(await test.getById(1));
-        console.log(await test.getAll);
-        console.log(await test.deleteById(1));
-        console.log(await test.getAll);
-        //console.log(await test.deleteAll());
+
+    async getRandom(){
+        try{
+            const objs = await this.getAll();
+            
+            let random = objs[Math.floor(Math.random() * objs.length)];
+
+            return random;
+        } catch (err) {
+            return console.log(`No se obtuvo el producto random: ${error}`);
+        }
     }
-    test();
+}
+
+module.exports = Contenedor;
+
+    // async function test(){
+    //     const test = new Contenedor('./src/productos.json');
+    //     console.log(await test.save({name: "Monitor", price: 600, thumbnail: "https://www.monitor-sony.com/wcsstore/GlobalAssets/images/products/monitor-sony-lg-27v5a-1-1.jpg"}));
+    //     console.log(await test.save({name: "Mouse", price: 100, thumbnail: "https://www.mouse-laptop.com/wcsstore/GlobalAssets/images/products/mouse-laptop-logitech-m-100-1-1.jpg"}));
+    //     console.log(await test.save({name: "Teclado", price: 200, thumbnail: "https://www.teclado-laptop.com/wcsstore/GlobalAssets/images/products/teclado-laptop-logitech-m-200-1-1.jpg"}));
+    //     console.log(await test.getById(1));
+    //     console.log(await test.getAll());
+        //console.log(await test.deleteById(1));
+        //console.log(await test.getAll);
+    // }
+    // test();
