@@ -84,7 +84,7 @@ class Contenedor {
 module.exports = Contenedor;
 
     // async function test(){
-    //     const test = new Contenedor('./src/productos.json');
+    //     const test = new Contenedor('./productos.json');
     //     console.log(await test.save({name: "Monitor", price: 600, thumbnail: "https://www.monitor-sony.com/wcsstore/GlobalAssets/images/products/monitor-sony-lg-27v5a-1-1.jpg"}));
     //     console.log(await test.save({name: "Mouse", price: 100, thumbnail: "https://www.mouse-laptop.com/wcsstore/GlobalAssets/images/products/mouse-laptop-logitech-m-100-1-1.jpg"}));
     //     console.log(await test.save({name: "Teclado", price: 200, thumbnail: "https://www.teclado-laptop.com/wcsstore/GlobalAssets/images/products/teclado-laptop-logitech-m-200-1-1.jpg"}));
