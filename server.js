@@ -1,27 +1,31 @@
+/* ------------------- Modules ------------------- */
 const express = require('express');
-const Contenedor = require('./Contenedor.js');
+const routerProductos = require("./src/routes/productos.routes");
 
 const app = express();
-const productos = new Contenedor('./productos.json');
-const PORT = 8080;
 
-app.get('/', (req, res)=>{
-    res.send('<h1 style="color: blue;">Bienvenidos al servidor express</h1> <h3>Para ver los productos, ingrese a la ruta /productos y para ver el producto aleatorio a la ruta /productoRandom</h2>');
+/* ------------------- Middleware ------------------- */
+app.use(express.json());
+app.use(express.urlencoded({ extended: true}));
+app.use(express.static(__dirname + '/public'));
+
+
+/* ------------------- Routes ------------------- */
+app.use('/api/productos', routerProductos);
+
+
+/* ------------------- Middleware Errores ------------------- */
+app.use(function(err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
 });
 
-app.get('/productos', async (req, res)=>{
-    const prod = await productos.getAll();
-    res.send(prod);
-});
 
-app.get('/productoRandom', async (req, res)=>{
-    res.send(await (productos.getRandom()));
+/* ------------------- Server ------------------- */
+const PORT = process.env.PORT || 8080;
+const server = app.listen(PORT, ()=> {
+    console.log(`Server on ->  ${JSON.stringify(server.address())}`);
 });
-
-app.get('*', (req, res)=>{
-    res.send('<h1 style="color: red;">404</h1>');
-});
-
-const server = app.listen(PORT, () => {
-    console.log(`El servidor HTTP se esta escuchando correctamente en http://localhost:${PORT}/`);
+server.on('error', error => {
+    console.error(`Error en el servidor ${error}`);
 });
