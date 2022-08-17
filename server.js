@@ -1,31 +1,42 @@
-/* ------------------- Modules ------------------- */
-const express = require('express');
-const routerProductos = require("./src/routes/productos.routes");
+const express = require('express')
+const Contenedor = require('./src/contenedor')
+const { Router } = express
 
-const app = express();
+const app = express()
+app.use(express.urlencoded({ extended: true }))
+app.use(express.static('public'))
 
-/* ------------------- Middleware ------------------- */
-app.use(express.json());
-app.use(express.urlencoded({ extended: true}));
-app.use(express.static(__dirname + '/public'));
+const router = Router()
+const productos = new Contenedor(__dirname + '/src/data/productos.json')
 
+app.use('/api/productos', router)
+app.use(express.static('./public'))
 
-/* ------------------- Routes ------------------- */
-app.use('/api/productos', routerProductos);
+router.get('/', (req, res) => {
+  return res.json(productos.content)
+})
 
+router.get('/:id', (req, res) => {
+  let id = Number(req.params.id)
+  return res.json(productos.getById(id))
+})
 
-/* ------------------- Middleware Errores ------------------- */
-app.use(function(err, req, res, next) {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
-});
+router.post('/', (req, res) => {
+  let obj = req.body
+  return res.json(productos.save(obj))
+})
 
+router.put('/:id', (req, res) => {
+  let obj = req.body
+  let id = Number(req.params.id)
+  return res.json(productos.update(id, obj))
+})
 
-/* ------------------- Server ------------------- */
-const PORT = process.env.PORT || 8080;
-const server = app.listen(PORT, ()=> {
-    console.log(`Server on ->  ${JSON.stringify(server.address())}`);
-});
-server.on('error', error => {
-    console.error(`Error en el servidor ${error}`);
-});
+router.delete('/:id', (req, res) => {
+  let id = Number(req.params.id)
+  return res.json(productos.deleteById(id))
+})
+
+app.listen(8080, () => {
+  console.log('Server on!')
+})

@@ -1,98 +1,78 @@
-const fs = require('fs') ;
+const fs = require('fs')
 
 class Contenedor {
+  constructor(name) {
+    this.fileName = name
+    this.countID = 0
+    this.content = []
+    this.init()
+  }
 
-    constructor(fileName) {
-        this.fileName = fileName;
+  async init() {
+    try {
+      let data = await fs.promises.readFile(this.fileName)
+      this.content = JSON.parse(data)
+      for (const element of this.content) {
+        if (element.id > this.countID) this.countID = element.id
+      }
+    } catch (error) {
+      console.log('No hay ningún archivo')
     }
+  }
 
-    async save(objs) {
-        try {
-            await fs.promises.writeFile(this.fileName, JSON.stringify(objs,null,2), 'utf-8');
-        } catch (error) {
-            throw new Error(error);
-        }
+  async write() {
+    await fs.promises.writeFile(this.fileName, JSON.stringify(this.content))
+  }
+
+  save(object) {
+    this.countID++
+    object['id'] = this.countID
+    this.content.push(object)
+    this.write()
+    return `El id del objeto es: ${this.countID}.`
+  }
+
+  getAll() {
+    return this.content
+  }
+
+  getById(id) {
+    let result
+    if (this.content !== []) {
+      result = this.content.find(x => x.id === id)
+      if (result === undefined) {
+        result = null
+      }
+    } else {
+      result = 'El archivo está vacío'
     }
+    return result
+  }
 
-    async create (data) {
-        const objs = await this.getAll();
-        let newId = objs.length === 0 ? 1 : objs[objs.length - 1].id + 1;
-        const newData = {...data, id: newId};
-        objs.push(newData);
-        await this.save(objs);
-        return newData;
+  deleteById(id) {
+    let result
+    if (this.content !== []) {
+      let newContent = this.content.filter(x => x.id !== id)
+      this.content = newContent
+      this.write()
+      result = `El producto fue eliminado`
+    } else {
+      result = `El archivo está vacío`
     }
+    return result
+  }
 
-    async update(data) {
-        const objs = await this.getAll();
-        const itemIndex = objs.findIndex(obj => obj.id === data.id);
-        if (itemIndex === -1) {
-            return itemIndex
-        }
-        objs[itemIndex] = data;
-        await this.save(objs);
-        return objs[itemIndex];
-    }
+  async deleteAll() {
+    this.content = this.content.splice(0, this.content.length)
+    this.write()
+  }
 
-    async getById(id) {
-        const objs = await this.getAll();
-        return objs.find((obj) => obj.id == id) || null;
-    }
-
-    async getAll() {
-        try {
-            const objs = await fs.promises.readFile(this.fileName, 'utf-8');
-            return JSON.parse(objs);
-        } catch (error) {
-            return [];
-        }
-    }
-
-    async getRandom(){
-        try{
-            const objs = await this.getAll();
-            
-            let random = objs[Math.floor(Math.random() * objs.length)];
-
-            return random;
-        } catch (err) {
-            return console.log(`No se obtuvo el producto random: ${error}`);
-        }
-    }
-
-    async deleteById(id) {
-        const objs = await this.getAll();
-        const newObjs = objs.filter(obj => obj.id != id);
-        if(objs.length === newObjs.length) {
-            return -1;
-        }
-        await this.save(newObjs);
-        return id;
-    }
-
-    async deleteAll() {
-        await this.save([]);
-        return true;
-    }
-
-
+  update(id, obj) {
+    const index = this.content.findIndex(objT => objT.id == id)
+    obj.id = this[index].id
+    this.content[index] = obj
+    return obj
+  }
 }
 
-module.exports = Contenedor;
-
-    // async function test(){
-    //     const test = new Contenedor('./productos.json');
-    //     console.log(await test.save({name: "Monitor", price: 600, thumbnail: "https://www.monitor-sony.com/wcsstore/GlobalAssets/images/products/monitor-sony-lg-27v5a-1-1.jpg"}));
-    //     console.log(await test.save({name: "Mouse", price: 100, thumbnail: "https://www.mouse-laptop.com/wcsstore/GlobalAssets/images/products/mouse-laptop-logitech-m-100-1-1.jpg"}));
-    //     console.log(await test.save({name: "Teclado", price: 200, thumbnail: "https://www.teclado-laptop.com/wcsstore/GlobalAssets/images/products/teclado-laptop-logitech-m-200-1-1.jpg"}));
-    //     console.log(await test.getById(1));
-    //     console.log(await test.getAll());
-    //     console.log(await test.deleteById(1));
-    //     console.log(await test.getAll);
-    // }
-    // test();
-
-
-
-
-
+module.exports = Contenedor
